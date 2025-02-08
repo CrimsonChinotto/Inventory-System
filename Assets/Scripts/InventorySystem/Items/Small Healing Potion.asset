@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Small Healing Potion
   id: 0001
   sprite: {fileID: 2047803548, guid: 4aa91d470d4c6454eaef92bd4e907e61, type: 3}
+  material: {fileID: 2100000, guid: 839fba1414868804d84c811a33f5e02d, type: 2}
   amountToHeal: 20

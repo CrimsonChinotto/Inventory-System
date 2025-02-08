@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Small Poison
   id: 0004
   sprite: {fileID: -949288713, guid: 4aa91d470d4c6454eaef92bd4e907e61, type: 3}
+  material: {fileID: 2100000, guid: 2a90cd776340c944bb01a274fd25dfce, type: 2}
   amountToDamage: 20
