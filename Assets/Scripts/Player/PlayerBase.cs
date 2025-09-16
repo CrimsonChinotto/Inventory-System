@@ -13,6 +13,8 @@ public class PlayerBase : MonoBehaviour
     /// </summary>
     public int MaxHealth { get { return maxHealth; } }
 
+    public ContainerController Inventory { get { return inventory; } }
+
     /// <summary>
     /// Returns true if the player's health is full (equals max health).
     /// </summary>
@@ -24,6 +26,7 @@ public class PlayerBase : MonoBehaviour
     public bool IsDead { get { return (CurrentHealth <= 0); } }
 
     [SerializeField] private int maxHealth;
+    [SerializeField] private ContainerController inventory;
 
     /// <summary>
     /// Event triggered when health changes.

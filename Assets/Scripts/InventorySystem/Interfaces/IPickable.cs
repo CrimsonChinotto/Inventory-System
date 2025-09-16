@@ -9,5 +9,5 @@ public interface IPickable
     /// Picks up the item and adds it to the specified inventory.
     /// </summary>
     /// <param name="inventory">The inventory to add the item to.</param>
-    void PickUp(InventoryController inventory);
+    void PickUp(ContainerController inventory);
 }

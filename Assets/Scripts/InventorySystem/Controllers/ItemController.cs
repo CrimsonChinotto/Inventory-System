@@ -20,11 +20,10 @@ public class ItemController : MonoBehaviour, IPickable
     /// Attempts to pick up the item and add it to the inventory.
     /// </summary>
     /// <param name="inventory">The player's inventory controller.</param>
-    public void PickUp(InventoryController inventory)
+    public void PickUp(ContainerController inventory)
     {
-        if (inventory.HasSpaceAvailable())
+        if (inventory.TryAdd(data))
         {
-            inventory.AddItem(data);
             Destroy(gameObject);
         }
     }
@@ -37,9 +36,9 @@ public class ItemController : MonoBehaviour, IPickable
     {
         if (collision.CompareTag("Player"))
         {
-            if (collision.TryGetComponent(out InventoryController inventory))
+            if (collision.TryGetComponent(out PlayerBase player))
             {
-                PickUp(inventory);
+                PickUp(player.Inventory);
             }
         }
     }

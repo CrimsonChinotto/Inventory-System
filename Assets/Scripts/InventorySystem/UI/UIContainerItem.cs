@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Represents an inventory item in the UI. Supports dragging and clicking.
 /// </summary>
-public class UIInventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     /// <summary>
     /// Stores the original parent transform before dragging.
@@ -22,7 +21,7 @@ public class UIInventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <summary>
     /// The slot where this item is currently placed.
     /// </summary>
-    public UIInventorySlot CurrentSlot { get; set; }
+    public UIContainerSlot CurrentSlot { get; set; }
 
     /// <summary>
     /// The image component displaying the item sprite.
@@ -32,7 +31,7 @@ public class UIInventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <summary>
     /// Event triggered when an item is selected (clicked).
     /// </summary>
-    public static Action<UIInventoryItem> OnItemSelected;
+    public static Action<UIContainerItem> OnItemSelected;
 
     /// <summary>
     /// Event triggered when an item starts being dragged.
@@ -52,7 +51,7 @@ public class UIInventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// </summary>
     private void Start()
     {
-        CurrentSlot = GetComponentInParent<UIInventorySlot>();
+        CurrentSlot = GetComponentInParent<UIContainerSlot>();
     }
 
     /// <summary>

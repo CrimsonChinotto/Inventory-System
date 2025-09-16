@@ -6,17 +6,17 @@ using UnityEngine.UI;
 /// <summary>
 /// Manages the inventory panel UI, including item selection, usage, and destruction.
 /// </summary>
-public class UIInventoryPanel : MonoBehaviour
+public class UIContainerPanel : MonoBehaviour
 {
     /// <summary>
     /// The currently selected inventory item.
     /// </summary>
-    private UIInventoryItem selectedItem;
+    private UIContainerItem selectedItem;
 
     /// <summary>
     /// Array of inventory slots.
     /// </summary>
-    [SerializeField] private UIInventorySlot[] inventorySlots;
+    [SerializeField] private UIContainerSlot[] containerSlots;
 
     [Space]
     [Header("Prefabs")]
@@ -62,9 +62,8 @@ public class UIInventoryPanel : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        UIInventoryItem.OnItemSelected += SetSelectedItem;
-        UIInventoryItem.OnItemDragged += ResetSelectedItem;
-        InventoryController.OnItemAdded += AddItem;
+        UIContainerItem.OnItemSelected += SetSelectedItem;
+        UIContainerItem.OnItemDragged += ResetSelectedItem;
         PlayerBase.OnHealthChanged += SetHPInterface;
 
         gameObject.SetActive(false);
@@ -77,9 +76,8 @@ public class UIInventoryPanel : MonoBehaviour
 
     private void OnDestroy()
     {
-        UIInventoryItem.OnItemSelected -= SetSelectedItem;
-        UIInventoryItem.OnItemDragged -= ResetSelectedItem;
-        InventoryController.OnItemAdded -= AddItem;
+        UIContainerItem.OnItemSelected -= SetSelectedItem;
+        UIContainerItem.OnItemDragged -= ResetSelectedItem;
         PlayerBase.OnHealthChanged -= SetHPInterface;
     }
 
@@ -134,25 +132,25 @@ public class UIInventoryPanel : MonoBehaviour
     /// Adds a new item to the first available inventory slot.
     /// </summary>
     /// <param name="item">The item data to add.</param>
-    private void AddItem(_ItemData item)
+    public void AddItem(_ItemData item)
     {
-        UIInventorySlot freeSlot = GetFirstFreeSlot();
+        UIContainerSlot freeSlot = GetFirstFreeSlot();
 
         if (freeSlot != null)
         {
             var newUIItem = Instantiate(itemPrefab);
             newUIItem.transform.SetParent(freeSlot.transform, false);
             freeSlot.Fill();
-            newUIItem.GetComponent<UIInventoryItem>().Setup(item);
+            newUIItem.GetComponent<UIContainerItem>().Setup(item);
         }
     }
 
     /// <summary>
     /// Removes the selected item as the currently selected item and updates UI.
     /// </summary>
-    private void RemoveSelectedItem()
+    public void RemoveSelectedItem()
     {
-        UIInventoryItem itemToRemove = selectedItem;
+        UIContainerItem itemToRemove = selectedItem;
         itemToRemove.CurrentSlot.Empty();
         ResetSelectedItem();
         Destroy(itemToRemove.gameObject);
@@ -162,15 +160,15 @@ public class UIInventoryPanel : MonoBehaviour
     /// Sets the given item as the currently selected item and updates UI.
     /// </summary>
     /// <param name="inventoryItem">The item to select.</param>
-    private void SetSelectedItem(UIInventoryItem inventoryItem)
+    private void SetSelectedItem(UIContainerItem inventoryItem)
     {
         if (selectedItem != null)
         {
-            selectedItem.GetComponentInParent<UIInventorySlot>().SetAsInactive();
+            selectedItem.GetComponentInParent<UIContainerSlot>().SetAsInactive();
         }
 
         selectedItem = inventoryItem;
-        selectedItem.GetComponentInParent<UIInventorySlot>().SetAsActive();
+        selectedItem.GetComponentInParent<UIContainerSlot>().SetAsActive();
         selectedItemName.text = inventoryItem.Data.itemName;
         interactionPanel.SetActive(true);
     }
@@ -182,7 +180,7 @@ public class UIInventoryPanel : MonoBehaviour
     {
         if (selectedItem != null)
         {
-            selectedItem.GetComponentInParent<UIInventorySlot>().SetAsInactive();
+            selectedItem.GetComponentInParent<UIContainerSlot>().SetAsInactive();
         }
 
         selectedItem = null;
@@ -193,9 +191,9 @@ public class UIInventoryPanel : MonoBehaviour
     /// Finds the first available inventory slot.
     /// </summary>
     /// <returns>The first free UIInventorySlot or null if none are available.</returns>
-    private UIInventorySlot GetFirstFreeSlot()
+    private UIContainerSlot GetFirstFreeSlot()
     {
-        foreach (UIInventorySlot slot in inventorySlots)
+        foreach (UIContainerSlot slot in containerSlots)
         {
             if (!slot.IsFull)
             {

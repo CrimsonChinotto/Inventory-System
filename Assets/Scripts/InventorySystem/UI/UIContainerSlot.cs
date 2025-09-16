@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Represents a slot in the inventory UI. Handles item drops and visual states.
 /// </summary>
-public class UIInventorySlot : MonoBehaviour, IDropHandler
+public class UIContainerSlot : MonoBehaviour, IDropHandler
 {
     /// <summary>
     /// The background color when the slot is active.
@@ -40,7 +40,7 @@ public class UIInventorySlot : MonoBehaviour, IDropHandler
     /// </summary>
     private void Start()
     {
-        IsFull = GetComponentInChildren<UIInventoryItem>() != null;
+        IsFull = GetComponentInChildren<UIContainerItem>() != null;
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class UIInventorySlot : MonoBehaviour, IDropHandler
     {
         if (transform.childCount == 0)
         {
-            UIInventoryItem item = eventData.pointerDrag.GetComponent<UIInventoryItem>();
+            UIContainerItem item = eventData.pointerDrag.GetComponent<UIContainerItem>();
             item.parentAfterDrag = transform;
             item.CurrentSlot = this; // Set the new parent slot
             IsFull = true;
