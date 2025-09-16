@@ -146,6 +146,24 @@ public class UIContainerPanel : MonoBehaviour
     }
 
     /// <summary>
+    /// Removes a specific item from the UI by data.
+    /// </summary>
+    /// <param name="item">The item to remove.</param>
+    public void RemoveItem(_ItemData item)
+    {
+        foreach (var slot in containerSlots)
+        {
+            var uiItem = slot.GetComponentInChildren<UIContainerItem>();
+            if (uiItem != null && uiItem.Data == item)
+            {
+                slot.Empty();
+                Destroy(uiItem.gameObject);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
     /// Removes the selected item as the currently selected item and updates UI.
     /// </summary>
     public void RemoveSelectedItem()

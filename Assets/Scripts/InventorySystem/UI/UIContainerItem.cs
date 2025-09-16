@@ -23,6 +23,13 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// </summary>
     public UIContainerSlot CurrentSlot { get; set; }
 
+    [HideInInspector] public bool DroppedSuccessfully;
+
+    /// <summary>
+    /// The slot where this item was placed before drag
+    /// </summary>
+    public UIContainerSlot LastSlot { get; private set; }
+
     /// <summary>
     /// The image component displaying the item sprite.
     /// </summary>
@@ -37,6 +44,8 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// Event triggered when an item starts being dragged.
     /// </summary>
     public static Action OnItemDragged;
+
+    
 
     /// <summary>
     /// Initializes the item by getting its image component.
@@ -65,6 +74,7 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (CurrentSlot != null)
         {
+            LastSlot = CurrentSlot;
             CurrentSlot.Empty(); // Notify the slot that it's empty now
             CurrentSlot = null;
         }
@@ -88,8 +98,23 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         image.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
+
+        if (!DroppedSuccessfully)
+        {
+            transform.SetParent(parentAfterDrag);
+            transform.localPosition = Vector3.zero;
+
+            if (LastSlot != null)
+            {
+                LastSlot.Fill();
+                CurrentSlot = LastSlot;
+            }
+        }
+
+        DroppedSuccessfully = false;
+        LastSlot = null;
     }
+
 
     /// <summary>
     /// Called when the item is clicked. Triggers the selection event.

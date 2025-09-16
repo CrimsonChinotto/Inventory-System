@@ -49,7 +49,7 @@ public class ContainerController : MonoBehaviour
     private void Start()
     {
         OnItemAdded += View.AddItem;
-        //OnItemRemoved += View.RemoveSelectedItem;
+        OnItemRemoved += View.RemoveItem;
     }
 
 

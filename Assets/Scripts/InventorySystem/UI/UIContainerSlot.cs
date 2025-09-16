@@ -8,6 +8,11 @@ using UnityEngine.UI;
 public class UIContainerSlot : MonoBehaviour, IDropHandler
 {
     /// <summary>
+    /// Parent container
+    /// </summary>
+    public UIContainerPanel Container { get; private set; }
+
+    /// <summary>
     /// The background color when the slot is active.
     /// </summary>
     [SerializeField] private Color activeColor;
@@ -33,6 +38,7 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     private void Awake()
     {
         background = GetComponent<Image>();
+        Container = transform.parent.gameObject.GetComponentInParent<UIContainerPanel>();
     }
 
     /// <summary>
@@ -49,14 +55,33 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     /// <param name="eventData">Pointer event data.</param>
     public void OnDrop(PointerEventData eventData)
     {
-        if (transform.childCount == 0)
+        if (eventData.pointerDrag == null) return;
+
+        // Get the item being dragged
+        UIContainerItem draggedItem = eventData.pointerDrag.GetComponent<UIContainerItem>();
+        if (draggedItem == null) return;
+
+        draggedItem.DroppedSuccessfully = false;
+
+        // Get source and target ContainerControllers
+        var sourceContainer = draggedItem.LastSlot?.Container.GetComponent<ContainerController>();
+        var targetContainer = Container.GetComponent<ContainerController>();
+
+        // No valid source/target
+        if (sourceContainer == null || targetContainer == null) return;
+
+        // Avoid dropping into same slot
+        if (sourceContainer != targetContainer)
         {
-            UIContainerItem item = eventData.pointerDrag.GetComponent<UIContainerItem>();
-            item.parentAfterDrag = transform;
-            item.CurrentSlot = this; // Set the new parent slot
-            IsFull = true;
+            sourceContainer.TryTransferTo(targetContainer, draggedItem.Data);
         }
+
+        draggedItem.DroppedSuccessfully = true;
+        draggedItem.CurrentSlot = this;
+        Fill();
+        draggedItem.transform.SetParent(transform, false);
     }
+
 
     /// <summary>
     /// Marks the slot as occupied.
