@@ -70,13 +70,14 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
         // No valid source/target
         if (sourceContainer == null || targetContainer == null) return;
 
+        draggedItem.DroppedSuccessfully = true;
+
         // Avoid dropping into same slot
         if (sourceContainer != targetContainer)
         {
-            sourceContainer.TryTransferTo(targetContainer, draggedItem.Data);
+            draggedItem.DroppedSuccessfully = sourceContainer.TryTransferTo(targetContainer, draggedItem.Data);
         }
-
-        draggedItem.DroppedSuccessfully = true;
+        
         draggedItem.CurrentSlot = this;
         Fill();
         draggedItem.transform.SetParent(transform, false);

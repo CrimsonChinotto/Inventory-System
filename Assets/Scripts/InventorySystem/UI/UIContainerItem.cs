@@ -35,6 +35,8 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// </summary>
     private Image image;
 
+    [SerializeField] private Transform draggingRootTransform;
+
     /// <summary>
     /// Event triggered when an item is selected (clicked).
     /// </summary>
@@ -44,8 +46,6 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// Event triggered when an item starts being dragged.
     /// </summary>
     public static Action OnItemDragged;
-
-    
 
     /// <summary>
     /// Initializes the item by getting its image component.

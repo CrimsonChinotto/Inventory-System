@@ -78,7 +78,7 @@ public class ContainerController : MonoBehaviour
         if (item == null) return false;
         bool removed = items.Remove(item);
 
-        if (removed) OnItemRemoved?.Invoke(item);
+        if (removed) View.RemoveItem(item);
         return removed;
     }
 
@@ -93,17 +93,11 @@ public class ContainerController : MonoBehaviour
         if (target == null || item == null) return false;
 
         // check policies
-        if (!this.AllowWithdraw) return false;    
-        if (!target.AllowDeposit) return false;   
+        if (!AllowWithdraw) return false;    
+        if (!target.AllowDeposit) return false;
 
-        // basic transfer with rollback
-        if (!TryRemove(item)) return false;       
-        if (!target.TryAdd(item))
-        {
-            // rollback if target couldn't accept
-            TryAdd(item);
-            return false;
-        }
+        items.Remove(item);
+        items.Add(item);
 
         return true;
     }
