@@ -22,6 +22,9 @@ public class ContainerController : MonoBehaviour
     /// <summary>Capacity accessor.</summary>
     public int Capacity => maxItems;
 
+    /// <summary>Starting content of the Container</summary>
+    [SerializeField] private _ItemData[] startingContent;
+
     /// <summary>Policy flags for this container (can deposit / can withdraw).</summary>
     [SerializeField] private ContainerPolicy policy;
 
@@ -48,6 +51,14 @@ public class ContainerController : MonoBehaviour
 
     private void Start()
     {
+        if (startingContent != null)
+        {
+            foreach (var item in startingContent)
+            {
+                TryAdd(item);
+            }
+        }
+
         OnItemAdded += View.AddItem;
         OnItemRemoved += View.RemoveItem;
     }

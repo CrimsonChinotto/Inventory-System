@@ -28,24 +28,9 @@ public class UIContainerPanel : MonoBehaviour
     [Space]
     [Header("UI")]
     /// <summary>
-    /// The interaction panel UI element.
-    /// </summary>
-    [SerializeField] private GameObject interactionPanel;
-
-    /// <summary>
     /// UI text element displaying the selected item's name.
     /// </summary>
     [SerializeField] private TextMeshProUGUI selectedItemName;
-
-    /// <summary>
-    /// UI text element displaying the Player health.
-    /// </summary>
-    [SerializeField] private TextMeshProUGUI healthPoints;
-
-    /// <summary>
-    /// Button used to open the inventory panel.
-    /// </summary>
-    [SerializeField] private Button openButton;
 
     /// <summary>
     /// Event triggered when an item is used.
@@ -57,28 +42,24 @@ public class UIContainerPanel : MonoBehaviour
     /// </summary>
     public static Action<_ItemData> OnItemDestroyed;
 
+    public static Action OnContainerOpened;
+    public static Action OnContainerClosed;
+
     /// <summary>
     /// Subscribes to inventory events and hides the inventory panel at startup.
     /// </summary>
-    private void Awake()
+    protected virtual void Start()
     {
         UIContainerItem.OnItemSelected += SetSelectedItem;
         UIContainerItem.OnItemDragged += ResetSelectedItem;
-        PlayerBase.OnHealthChanged += SetHPInterface;
 
         gameObject.SetActive(false);
     }
 
-    private void OnEnable()
-    {
-        SetHPInterface();
-    }
-
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         UIContainerItem.OnItemSelected -= SetSelectedItem;
         UIContainerItem.OnItemDragged -= ResetSelectedItem;
-        PlayerBase.OnHealthChanged -= SetHPInterface;
     }
 
     /// <summary>
@@ -87,7 +68,7 @@ public class UIContainerPanel : MonoBehaviour
     public void UIC_Open()
     {
         gameObject.SetActive(true);
-        openButton.gameObject.SetActive(false);
+        OnContainerOpened?.Invoke();
     }
 
     /// <summary>
@@ -97,7 +78,7 @@ public class UIContainerPanel : MonoBehaviour
     {
         ResetSelectedItem();
         gameObject.SetActive(false);
-        openButton.gameObject.SetActive(true);
+        OnContainerClosed?.Invoke();
     }
 
     /// <summary>
@@ -177,32 +158,30 @@ public class UIContainerPanel : MonoBehaviour
     /// <summary>
     /// Sets the given item as the currently selected item and updates UI.
     /// </summary>
-    /// <param name="inventoryItem">The item to select.</param>
-    private void SetSelectedItem(UIContainerItem inventoryItem)
+    /// <param name="containerItem">The item to select.</param>
+    protected virtual void SetSelectedItem(UIContainerItem containerItem)
     {
         if (selectedItem != null)
         {
             selectedItem.GetComponentInParent<UIContainerSlot>().SetAsInactive();
         }
 
-        selectedItem = inventoryItem;
+        selectedItem = containerItem;
         selectedItem.GetComponentInParent<UIContainerSlot>().SetAsActive();
-        selectedItemName.text = inventoryItem.Data.itemName;
-        interactionPanel.SetActive(true);
     }
 
     /// <summary>
     /// Resets the selected item and hides the interaction panel.
     /// </summary>
-    private void ResetSelectedItem()
+    protected virtual void ResetSelectedItem()
     {
         if (selectedItem != null)
         {
-            selectedItem.GetComponentInParent<UIContainerSlot>().SetAsInactive();
+            var container = selectedItem.GetComponentInParent<UIContainerSlot>();
+            if (container != null) { container.SetAsInactive(); }
         }
 
         selectedItem = null;
-        interactionPanel.SetActive(false);
     }
 
     /// <summary>
@@ -220,15 +199,5 @@ public class UIContainerPanel : MonoBehaviour
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// Set the Health Points player Interface
-    /// </summary>
-    private void SetHPInterface()
-    {
-        var player = GameManager.Instance.player;
-
-        healthPoints.text = $"HP: {player.CurrentHealth.ToString()} / {player.MaxHealth.ToString()}";
     }
 }

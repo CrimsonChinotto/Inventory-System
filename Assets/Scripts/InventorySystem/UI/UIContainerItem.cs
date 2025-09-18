@@ -30,12 +30,12 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// </summary>
     public UIContainerSlot LastSlot { get; private set; }
 
+    [SerializeField] private _ItemData startingData;
+
     /// <summary>
     /// The image component displaying the item sprite.
     /// </summary>
     private Image image;
-
-    [SerializeField] private Transform draggingRootTransform;
 
     /// <summary>
     /// Event triggered when an item is selected (clicked).
@@ -60,6 +60,8 @@ public class UIContainerItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// </summary>
     private void Start()
     {
+        if (startingData != null) { Setup(startingData); }
+
         CurrentSlot = GetComponentInParent<UIContainerSlot>();
     }
 
