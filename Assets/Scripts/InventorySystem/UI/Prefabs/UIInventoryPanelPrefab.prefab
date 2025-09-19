@@ -122,7 +122,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIInventoryPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
         m_MethodName: UIC_DestroyItem
         m_Mode: 1
         m_Arguments:
@@ -604,8 +604,44 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 6180900885470187827}
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
+        m_MethodName: UIC_Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIInventoryPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
+        m_MethodName: UIC_Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
+        m_MethodName: UIC_Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
         m_MethodName: UIC_Close
         m_Mode: 1
         m_Arguments:
@@ -880,10 +916,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7b98bd516a815429b5641d5384bb7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingContent: []
   policy:
     AllowDeposit: 1
     AllowWithdraw: 1
-  maxItems: 15
+  maxItems: 20
 --- !u!114 &6180900885470187827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -914,7 +951,6 @@ MonoBehaviour:
   - {fileID: 5168751438667017101}
   itemPrefab: {fileID: 3771870270584276254, guid: 7120bdb5ad47d1e469a16de0129381ef, type: 3}
   selectedItemName: {fileID: 1678296743899756745}
-  openButton: {fileID: 0}
   interactionPanel: {fileID: 5541260378254753864}
   healthPoints: {fileID: 4303031825886417808}
 --- !u!1 &5215725808618386264
@@ -1048,7 +1084,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 20, y: 10, z: 20, w: 10}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1261,7 +1297,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIInventoryPanel, Assembly-CSharp
+        m_TargetAssemblyTypeName: UIContainerPanel, Assembly-CSharp
         m_MethodName: UIC_UseItem
         m_Mode: 1
         m_Arguments:
@@ -1592,8 +1628,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -12.302}
-  m_SizeDelta: {x: 0, y: 540.78}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 516.1716}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1700831632548294609
 MonoBehaviour:
