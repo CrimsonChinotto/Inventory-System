@@ -12,6 +12,7 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     /// </summary>
     public UIContainerPanel Container { get; private set; }
 
+    [Header("UI")]
     /// <summary>
     /// The background color when the slot is active.
     /// </summary>
@@ -44,7 +45,7 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     /// <summary>
     /// Checks if the slot already contains an item at the start.
     /// </summary>
-    private void Start()
+    protected virtual void Start()
     {
         IsFull = GetComponentInChildren<UIContainerItem>() != null;
     }
@@ -53,36 +54,13 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     /// Handles the drop event when an item is dragged onto this slot.
     /// </summary>
     /// <param name="eventData">Pointer event data.</param>
-    public void OnDrop(PointerEventData eventData)
+    public virtual void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag == null) return;
-
-        // Get the item being dragged
-        UIContainerItem draggedItem = eventData.pointerDrag.GetComponent<UIContainerItem>();
+        var draggedItem = GetDraggedItem(eventData);
         if (draggedItem == null) return;
 
-        draggedItem.DroppedSuccessfully = false;
-
-        // Get source and target ContainerControllers
-        var sourceContainer = draggedItem.LastSlot?.Container.GetComponent<ContainerController>();
-        var targetContainer = Container.GetComponent<ContainerController>();
-
-        // No valid source/target
-        if (sourceContainer == null || targetContainer == null) return;
-
-        draggedItem.DroppedSuccessfully = true;
-
-        // Avoid dropping into same slot
-        if (sourceContainer != targetContainer)
-        {
-            draggedItem.DroppedSuccessfully = sourceContainer.TryTransferTo(targetContainer, draggedItem.Data);
-        }
-        
-        draggedItem.CurrentSlot = this;
-        Fill();
-        draggedItem.transform.SetParent(transform, false);
+        HandleDrop(draggedItem);
     }
-
 
     /// <summary>
     /// Marks the slot as occupied.
@@ -114,5 +92,41 @@ public class UIContainerSlot : MonoBehaviour, IDropHandler
     public void SetAsInactive()
     {
         background.color = inactiveColor;
+    }
+
+    protected UIContainerItem GetDraggedItem(PointerEventData eventData)
+    {
+        if (eventData.pointerDrag == null) return null;
+
+        // Get the item being dragged
+        UIContainerItem draggedItem = eventData.pointerDrag.GetComponent<UIContainerItem>();
+
+        return draggedItem;
+    }
+
+    protected void HandleDrop(UIContainerItem draggedItem)
+    {
+        draggedItem.DroppedSuccessfully = false;
+
+        // I WANT TO ADD THE CHECK HERE IN THE OVERRIDE METHOD, BUT I DONT WANNA REWRITE THE WHOLE CODE
+
+        // Get source and target ContainerControllers
+        var sourceContainer = draggedItem.LastSlot?.Container.GetComponent<ContainerController>();
+        var targetContainer = Container.GetComponent<ContainerController>();
+
+        // No valid source/target
+        if (sourceContainer == null || targetContainer == null) return;
+
+        draggedItem.DroppedSuccessfully = true;
+
+        // Avoid dropping into same slot
+        if (sourceContainer != targetContainer)
+        {
+            draggedItem.DroppedSuccessfully = sourceContainer.TryTransferTo(targetContainer, draggedItem.Data);
+        }
+
+        draggedItem.CurrentSlot = this;
+        Fill();
+        draggedItem.transform.SetParent(transform, false);
     }
 }
